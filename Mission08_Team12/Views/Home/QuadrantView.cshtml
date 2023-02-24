@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Quadrants";
+}
+
+<center><h1>Time Management Matrix To Do List</h1></center>
+<br />
+<div class="row">
+    <div class="col text-center one">
+        <h2>Urgent and Important</h2>
+        @foreach (Todo t in ViewBag.Todo)
+        {
+            @{if (Category == "Urgent/Important")
+                {
+                    <p value="@t.JobId">@t.JobName</p>
+                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
+                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
+                }
+            }
+        </div>
+    <div class="col text-center two">
+        <h2>
+            Not Urgent but Important
+        </h2>
+        @foreach (Todo t in ViewBag.Todo)
+        {
+            @{if (Category == "NotUrgent/Important")
+                {
+                    <p value="@t.JobId">@t.JobName</p>
+                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
+                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
+                }
+            }
+        </div>
+</div>
+<div class="row">
+    <div class="col text-center three">
+        <h2>Urgent but Not Important</h2>
+        @foreach (Todo t in ViewBag.Todo)
+        {
+            @{if (Category == "Urgent/NotImportant")
+                {
+                    <p value="@t.JobId">@t.JobName</p>
+                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
+                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
+                }
+            }
+        </div>
+    <div class="col text-center four">
+        <h2>Not Urgent and Not Important</h2>
+        @foreach (Todo t in ViewBag.Todo)
+        {
+            @{if (Category == "NotUrgent/NotImportant")
+                {
+                    <p value="@t.JobId">@t.JobName</p>
+                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
+                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
+                }
+            }
+        </div>
+</div>

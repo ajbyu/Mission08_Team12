@@ -59,8 +59,8 @@ html {
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
 .footer {
   position: absolute;
@@ -69,3 +69,20 @@ body {
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
 }
+
+.one:hover {
+    background-color: lightyellow;
+}
+
+.two:hover {
+    background-color: lightgreen;
+}
+
+.three:hover {
+    background-color: lightblue;
+}
+
+.four:hover {
+    background-image: url('file:///C:\Users\BYU Rental\Source\Repos\Mission08_Team12\Mission08_Team12\wwwroot\img\WonderHilton.png');
+}
+

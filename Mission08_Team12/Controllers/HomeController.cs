@@ -20,7 +20,7 @@ namespace Mission08_Team12.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View("QuadrantView");
         }
 
         public IActionResult Privacy()
