@@ -11,27 +11,101 @@ namespace Mission08_Team12.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ToDoContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ToDoContext context)
         {
-            _logger = logger;
+            _context = context;
         }
 
+        //Home
         public IActionResult Index()
         {
-            return View();
+            return View("QuadrantView");
         }
 
-        public IActionResult Privacy()
+        //Create
+        [HttpGet]
+        public IActionResult CreateToDo()
         {
-            return View();
+            ViewBag.ToDoCategories = _context.ToDoCategories.ToList();
+
+            return View(new ToDo());
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [HttpPost]
+        public IActionResult CreateToDo(ToDo todo)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (ModelState.IsValid)
+            {
+                _context.Add(todo);
+                _context.SaveChanges();
+                return View(todo);
+            }
+            else
+            {
+                return View();
+            }
+            
+        }
+
+        //Read
+        [HttpGet]
+        public IActionResult ViewToDos()
+        {
+            var todos = _context
+                .ToDos
+                .Where(t => t.Complete == false)
+                .ToList();
+
+            return View(todos);
+        }
+
+        //Update
+        [HttpGet]
+        public IActionResult EditToDo(int id)
+        {
+            var todo = _context
+                .ToDos
+                .SingleOrDefault(t => t.Id == id);
+
+            return View("EnterToDo", todo);
+        }
+
+        [HttpPost]
+        public IActionResult EditToDo(ToDo todo)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Update(todo);
+                _context.SaveChanges();
+
+                return RedirectToAction("ViewToDos");
+            }
+            else
+            {
+                return View("EnterToDo", todo);
+            }
+        }
+
+        //Delete
+        [HttpGet]
+        public ActionResult DeleteToDo(int id)
+        {
+            var todo = _context
+                .ToDos
+                .SingleOrDefault(todo => t.Id == id);
+
+            return View(todo);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteToDo(ToDo todo)
+        {
+            _context.Remove(todo);
+            _context.SaveChanges();
+
+            return RedirectToAction("ViewToDos");
         }
     }
 }
