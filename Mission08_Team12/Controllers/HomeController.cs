@@ -21,7 +21,7 @@ namespace Mission08_Team12.Controllers
         //Home
         public IActionResult Index()
         {
-            return View();
+            return View("QuadrantView");
         }
 
         //Create
