@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Mission08_Team12.Models;
 using System;
@@ -11,9 +12,9 @@ namespace Mission08_Team12.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ToDoContext _context;
+        private readonly ToDoDatabaseContext _context;
 
-        public HomeController(ToDoContext context)
+        public HomeController(ToDoDatabaseContext context)
         {
             _context = context;
         }
@@ -21,41 +22,46 @@ namespace Mission08_Team12.Controllers
         //Home
         public IActionResult Index()
         {
-            return View("QuadrantView");
+            return View();
         }
 
         //Create
         [HttpGet]
-        public IActionResult CreateToDo()
+        public IActionResult AddItem()
         {
-            ViewBag.ToDoCategories = _context.ToDoCategories.ToList();
+            ViewBag.ToDoCategories = _context.Categories.ToList();
+            ViewBag.Quadrants = _context.Quadrants.ToList();
 
             return View(new ToDo());
         }
 
         [HttpPost]
-        public IActionResult CreateToDo(ToDo todo)
+        public IActionResult AddItem(ToDo todo)
         {
+            ViewBag.ToDoCategories = _context.Categories.ToList();
+            ViewBag.Quadrants = _context.Quadrants.ToList();
+
             if (ModelState.IsValid)
             {
                 _context.Add(todo);
                 _context.SaveChanges();
-                return View(todo);
+                return RedirectToAction("AddItem");
             }
             else
             {
                 return View();
             }
-            
         }
 
         //Read
         [HttpGet]
-        public IActionResult ViewToDos()
+        public IActionResult QuadrantView()
         {
             var todos = _context
-                .ToDos
-                .Where(t => t.Complete == false)
+                .ToDo
+                .Where(t => t.Completed == false)
+                .Include(t => t.Quadrant)
+                .Include(t => t.Category)
                 .ToList();
 
             return View(todos);
@@ -65,26 +71,48 @@ namespace Mission08_Team12.Controllers
         [HttpGet]
         public IActionResult EditToDo(int id)
         {
-            var todo = _context
-                .ToDos
-                .SingleOrDefault(t => t.Id == id);
+            ViewBag.ToDoCategories = _context.Categories.ToList();
+            ViewBag.Quadrants = _context.Quadrants.ToList();
 
-            return View("EnterToDo", todo);
+            var todo = _context
+                .ToDo
+                .SingleOrDefault(t => t.ToDoID == id);
+
+            return View("AddItem", todo);
+        }
+
+        //Mark complete
+        [HttpGet]
+        public IActionResult MarkComplete(int id)
+        {
+            var todo = _context
+                .ToDo
+                .Where(t => t.ToDoID.Equals(id))
+                .FirstOrDefault();
+
+            todo.Completed = true;
+            _context.Update(todo);
+            _context.SaveChanges();
+
+            return RedirectToAction("QuadrantView");
         }
 
         [HttpPost]
         public IActionResult EditToDo(ToDo todo)
         {
+            ViewBag.ToDoCategories = _context.Categories.ToList();
+            ViewBag.Quadrants = _context.Quadrants.ToList();
+
             if (ModelState.IsValid)
             {
                 _context.Update(todo);
                 _context.SaveChanges();
 
-                return RedirectToAction("ViewToDos");
+                return RedirectToAction("QuadrantView");
             }
             else
             {
-                return View("EnterToDo", todo);
+                return View("AddItem", todo);
             }
         }
 
@@ -93,19 +121,13 @@ namespace Mission08_Team12.Controllers
         public ActionResult DeleteToDo(int id)
         {
             var todo = _context
-                .ToDos
-                .SingleOrDefault(todo => t.Id == id);
+                .ToDo
+                .SingleOrDefault(t => t.ToDoID == id);
 
-            return View(todo);
-        }
-
-        [HttpPost]
-        public IActionResult DeleteToDo(ToDo todo)
-        {
             _context.Remove(todo);
             _context.SaveChanges();
 
-            return RedirectToAction("ViewToDos");
+            return RedirectToAction("QuadrantView");
         }
     }
 }

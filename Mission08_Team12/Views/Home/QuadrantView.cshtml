@@ -1,60 +1,68 @@
-﻿@{
+﻿@model IEnumerable<ToDo>
+
+@{
     ViewData["Title"] = "Quadrants";
 }
 
 <center><h1>Time Management Matrix To Do List</h1></center>
 <br />
+
 <div class="row">
     <div class="col text-center one">
         <h2>Urgent and Important</h2>
-        @foreach (Todo t in ViewBag.Todo)
+        @foreach (ToDo t in Model)
         {
-            @{if (Category == "Urgent/Important")
-                {
-                    <p value="@t.JobId">@t.JobName</p>
-                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
-                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
-                }
+            if (t.Quadrant.QuadrantName == "Urgent/Important")
+            {
+                <p value="@t.ToDoID">@t.Task</p>
+                <a asp-controller="Home" asp-action="EditToDo" asp-route-id="@t.ToDoID">Edit</a>
+                <a asp-controller="Home" asp-action="DeleteToDo" asp-route-id="@t.ToDoID">Delete</a>
+                <a asp-controller="Home" asp-action="MarkComplete" asp-route-id="@t.ToDoID">Mark Complete</a>
             }
-        </div>
+        }
+    </div>
     <div class="col text-center two">
         <h2>
             Not Urgent but Important
         </h2>
-        @foreach (Todo t in ViewBag.Todo)
+        @foreach (ToDo t in Model)
         {
-            @{if (Category == "NotUrgent/Important")
-                {
-                    <p value="@t.JobId">@t.JobName</p>
-                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
-                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
-                }
+            if (t.Quadrant.QuadrantName == "Not Urgent/Important")
+            {
+                <p value="@t.ToDoID">@t.Task</p>
+                <a asp-controller="Home" asp-action="EditToDo" asp-route-id="@t.ToDoID">Edit</a>
+                <a asp-controller="Home" asp-action="DeleteToDo" asp-route-id="@t.ToDoID">Delete</a>
+                <a asp-controller="Home" asp-action="MarkComplete" asp-route-id="@t.ToDoID">Mark Complete</a>
             }
-        </div>
+        }
+    </div>
 </div>
+
 <div class="row">
     <div class="col text-center three">
         <h2>Urgent but Not Important</h2>
-        @foreach (Todo t in ViewBag.Todo)
+        @foreach (ToDo t in Model)
         {
-            @{if (Category == "Urgent/NotImportant")
+            if (t.Quadrant.QuadrantName == "Urgent/Not Important")
                 {
-                    <p value="@t.JobId">@t.JobName</p>
-                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
-                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
+                    <p value="@t.ToDoID">@t.Task</p>
+                <a asp-controller="Home" asp-action="EditToDo" asp-route-id="@t.ToDoID">Edit</a>
+                <a asp-controller="Home" asp-action="DeleteToDo" asp-route-id="@t.ToDoID">Delete</a>
+                <a asp-controller="Home" asp-action="MarkComplete" asp-route-id="@t.ToDoID">Mark Complete</a>
                 }
             }
-        </div>
+    </div>
     <div class="col text-center four">
         <h2>Not Urgent and Not Important</h2>
-        @foreach (Todo t in ViewBag.Todo)
+        @foreach (ToDo t in Model)
         {
-            @{if (Category == "NotUrgent/NotImportant")
-                {
-                    <p value="@t.JobId">@t.JobName</p>
-                    <a asp-controller="Home" asp-action="Edit" asp-route="@t.JobId">Edit</a>
-                    <a asp-controller="Home" asp-action="Delete" asp-route="@t.JobId">Delete</a>
-                }
+            if (t.Quadrant.QuadrantName == "Not Urgent/Not Important")
+            {
+                <p value="@t.ToDoID">@t.Task</p>
+                <a asp-controller="Home" asp-action="EditToDo" asp-route-id="@t.ToDoID">Edit</a>
+                <a asp-controller="Home" asp-action="DeleteToDo" asp-route-id="@t.ToDoID">Delete</a>
+                <a asp-controller="Home" asp-action="MarkComplete" asp-route-id="@t.ToDoID">Mark Complete</a>
             }
-        </div>
+        }
+    </div>
 </div>
